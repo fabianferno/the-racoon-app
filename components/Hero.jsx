@@ -3,14 +3,15 @@ import React from 'react';
 import Logo from './Logo';
 
 const Hero = () => (
-  <div className="  my-5 text-center" data-testid="hero">
+  <div className="hero my-5 text-center" data-testid="hero">
     <Logo testId="hero-logo" />
-    <h1 style={{ fontSize: '7rem' }} className="mb-4" data-testid="hero-title">
-      the <strong>racoon</strong> app
+    <h1 className="mb-4" data-testid="hero-title">
+      Next.js Sample Project
     </h1>
 
     <p className="lead" data-testid="hero-lead">
-      The next best issue ticketing platform.
+      This is a sample application that demonstrates an authentication flow for a Regular Web App, using{' '}
+      <a href="https://nextjs.org">Next.js</a>
     </p>
   </div>
 );

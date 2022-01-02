@@ -1,14 +1,11 @@
 import React from 'react';
 
 const Footer = () => (
-  <footer className="bg-black p-3 text-center" data-testid="footer">
+  <footer className="bg-light p-3 text-center" data-testid="footer">
     <div className="logo" data-testid="footer-logo" />
-    <h5 data-testid="footer-text">
-      Developed by{' '}
-      <a className="text-primary text-decoration-none font-weight-bold " href="https://www.fabianferno.tech">
-        Fabian Ferno
-      </a>
-    </h5>
+    <p data-testid="footer-text">
+      Sample project provided by <a href="https://auth0.com">Auth0</a>
+    </p>
   </footer>
 );
 
