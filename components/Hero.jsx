@@ -1,17 +1,14 @@
 import React from 'react';
 
-import Logo from './Logo';
-
 const Hero = () => (
-  <div className="hero my-5 text-center" data-testid="hero">
-    <Logo testId="hero-logo" />
-    <h1 className="mb-4" data-testid="hero-title">
-      Next.js Sample Project
+  <div className="  my-5 text-center" data-testid="hero">
+    <img style={{ height: '200px' }} src="/images/the-racoon-app-logo.png" alt="Logo" srcSet="" />
+    <h1 style={{ fontSize: '5rem' }} className="text-white mt-4 font-weight-bold">
+      the racoon app
     </h1>
 
-    <p className="lead" data-testid="hero-lead">
-      This is a sample application that demonstrates an authentication flow for a Regular Web App, using{' '}
-      <a href="https://nextjs.org">Next.js</a>
+    <p className="text-secondary h6 font-weight-normal " data-testid="hero-lead">
+      An Issue/Project Tracker ⏱️ that helps ease software delivery 🚛. Submit, Track & Resolve bugs in a flash ⚡
     </p>
   </div>
 );

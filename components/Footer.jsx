@@ -1,10 +1,12 @@
 import React from 'react';
 
 const Footer = () => (
-  <footer className="bg-light p-3 text-center" data-testid="footer">
-    <div className="logo" data-testid="footer-logo" />
-    <p data-testid="footer-text">
-      Sample project provided by <a href="https://auth0.com">Auth0</a>
+  <footer className="bg-light text-center" data-testid="footer">
+    <p className="text-black" data-testid="footer-text">
+      Built by{' '}
+      <a className="text-primary" href="https://www.fabianferno.com">
+        Fabian Ferno ⚡
+      </a>
     </p>
   </footer>
 );
