@@ -18,13 +18,12 @@ async function upsertUser(user) {
   }
 }
 
-async function getUser(user) {
+async function getUser(email) {
   try {
     await mongo.connect();
-    const result = mongo.db().collection('users').find({ email: user.email });
+    const result = mongo.db().collection('users').find({ email: email });
     console.log(result);
     return result;
-    // console.log(`New listing created with the following id: ${result.insertedId}`);
   } catch (e) {
     console.error(e);
   } finally {
@@ -34,21 +33,19 @@ async function getUser(user) {
 
 export default function handler(req, res) {
   // Get data from your database
-  var user = req.body.user;
-  // console.log(user);
   var result;
 
   switch (req.body.crudOption) {
     case 'upsert':
       result = upsertUser({
-        fullName: user.name,
-        email: user.email,
-        auth0: user.sub
+        fullName: req.body.user.name,
+        email: req.body.user.email,
+        auth0: req.body.user.sub
       }).catch(e => console.error(e));
       break;
     case 'read':
       result = getUser({
-        email: user.email
+        email: req.body.email
       }).catch(e => console.error(e));
       break;
     case 'delete':
