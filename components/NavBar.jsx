@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Collapse,
   Container,
@@ -13,6 +13,7 @@ import {
   DropdownItem
 } from 'reactstrap';
 import { useUser } from '@auth0/nextjs-auth0';
+import axios from 'axios';
 
 import PageLink from './PageLink';
 import AnchorLink from './AnchorLink';
@@ -22,34 +23,54 @@ const NavBar = () => {
   const { user, isLoading } = useUser();
   const toggle = () => setIsOpen(!isOpen);
 
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      axios
+        .post('/api/users', {
+          crudOption: 'upsert',
+          user: user
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      console.log('no user');
+    }
+  }, [user]);
+
   return (
     <div className="nav-container" data-testid="navbar">
       <Navbar color="light" light expand="md">
         <Container>
-          <NavbarBrand className="logo" />
+          <PageLink href="/" testId="navbar-home">
+            <NavbarBrand>
+              <h1 className="bg-primary rounded  card text-white font-weight-bold  px-3"> racoon </h1>
+            </NavbarBrand>
+          </PageLink>
+
           <NavbarToggler onClick={toggle} data-testid="navbar-toggle" />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar data-testid="navbar-items">
-              <NavItem>
-                <PageLink href="/" className="nav-link" testId="navbar-home">
-                  Home
-                </PageLink>
-              </NavItem>
               {user && (
                 <>
-                  <NavItem>
-                    <PageLink href="/csr" className="nav-link" testId="navbar-csr">
+                  {/* <NavItem>
+                    <PageLink href="/csr" className="nav-menu" testId="navbar-csr">
                       Client-side rendered page
                     </PageLink>
                   </NavItem>
                   <NavItem>
-                    <PageLink href="/ssr" className="nav-link" testId="navbar-ssr">
+                    <PageLink href="/ssr" className="nav-menu" testId="navbar-ssr">
                       Server-side rendered page
                     </PageLink>
-                  </NavItem>
+                  </NavItem> */}
                   <NavItem>
-                    <PageLink href="/external" className="nav-link" testId="navbar-external">
-                      External API
+                    <PageLink href="/dashboard" className="nav-menu" testId="navbar-external">
+                      Dashboard
                     </PageLink>
                   </NavItem>
                 </>
@@ -68,34 +89,27 @@ const NavBar = () => {
                 </NavItem>
               )}
               {user && (
-                <UncontrolledDropdown nav inNavbar data-testid="navbar-menu-desktop">
-                  <DropdownToggle nav caret id="profileDropDown">
+                <div className="d-flex align-items-center justify-content-center">
+                  <h6 className="mr-3">{`${
+                    new Date().getHours() < 12
+                      ? 'Top of the morning!'
+                      : new Date().getHours() < 18
+                      ? 'Good Afternoon 🌞,'
+                      : 'Catch a Break,'
+                  } ${user.given_name}`}</h6>
+                  <PageLink href="/profile" testId="navbar-profile-desktop">
                     <img
                       src={user.picture}
                       alt="Profile"
-                      className="nav-user-profile rounded-circle"
+                      className="nav-user-profile rounded-circle mx-3"
                       width="50"
                       height="50"
                       decode="async"
                       data-testid="navbar-picture-desktop"
                     />
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem header data-testid="navbar-user-desktop">
-                      {user.name}
-                    </DropdownItem>
-                    <DropdownItem className="dropdown-profile" tag="span">
-                      <PageLink href="/profile" icon="user" testId="navbar-profile-desktop">
-                        Profile
-                      </PageLink>
-                    </DropdownItem>
-                    <DropdownItem id="qsLogoutBtn">
-                      <AnchorLink href="/api/auth/logout" icon="power-off" testId="navbar-logout-desktop">
-                        Log out
-                      </AnchorLink>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+                  </PageLink>
+                  <AnchorLink href="/api/auth/logout" icon="power-off" testId="navbar-logout-desktop"></AnchorLink>
+                </div>
               )}
             </Nav>
             {!isLoading && !user && (
