@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import initFontAwesome from '../utils/initFontAwesome';
-import '../styles/globals.css';
+import '../styles/scss/style.scss';
 
 initFontAwesome();
 
