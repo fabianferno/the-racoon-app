@@ -45,11 +45,11 @@ const NavBar = () => {
 
   return (
     <div className="nav-container" data-testid="navbar">
-      <Navbar color="light" light expand="md">
+      <Navbar color="black" light expand="md">
         <Container>
           <PageLink href="/" testId="navbar-home">
             <NavbarBrand>
-              <h1 className="bg-primary rounded  card text-white font-weight-bold  px-3"> racoon </h1>
+              <h1 className="bg-primary rounded mt-2 card text-white font-weight-bold  px-3"> racoon </h1>
             </NavbarBrand>
           </PageLink>
 
