@@ -10,30 +10,45 @@ async function upsertUser(user) {
       .updateOne({ email: user.email }, { $set: user }, { upsert: true });
 
     return result;
-    // console.log(`New listing created with the following id: ${result.insertedId}`);
   } catch (e) {
     console.error(e);
   } finally {
-    mongo.close();
+    await mongo.close();
   }
 }
 
 async function getUser(email) {
   try {
     await mongo.connect();
-    const result = mongo.db().collection('users').find({ email: email });
-    console.log(result);
-    return result;
+    const cursor = mongo
+      .db()
+      .collection('users')
+      .find(
+        {
+          email: {
+            $eq: email
+          }
+        },
+        {
+          sort: { email: 1 }, // Sort by email ascending
+          projection: { _id: 1, email: 1, fullName: 1, auth0: 1 }
+        }
+      );
+    // print a message if no documents were found
+    if ((await cursor.count()) === 0) {
+      console.log('No documents found!');
+    }
+    return await cursor.toArray();
   } catch (e) {
     console.error(e);
   } finally {
-    mongo.close();
+    await mongo.close();
   }
 }
 
 export default function handler(req, res) {
   // Get data from your database
-  var result;
+  var result = {};
 
   switch (req.body.crudOption) {
     case 'upsert':
@@ -41,19 +56,27 @@ export default function handler(req, res) {
         fullName: req.body.user.name,
         email: req.body.user.email,
         auth0: req.body.user.sub
-      }).catch(e => console.error(e));
+      })
+        .then(data => {
+          return res.status(200).json(data.data);
+        })
+        .catch(e => {
+          console.error(e);
+          res.status(500).json(e);
+        });
       break;
     case 'read':
-      result = getUser({
-        email: req.body.email
-      }).catch(e => console.error(e));
-      break;
-    case 'delete':
-      result = deleteUser(user).catch(e => console.error(e));
+      getUser(req.body.user)
+        .then(data => {
+          return res.status(200).json({ data: data });
+        })
+        .catch(e => {
+          console.error(e);
+          res.status(500).json(e);
+        });
       break;
     default:
       result = 'No Crud Specified';
+      return res.status(200).json({ data: result });
   }
-
-  res.status(200).json({ data: result, status: 'Works' });
 }
