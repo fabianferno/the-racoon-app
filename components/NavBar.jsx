@@ -18,6 +18,8 @@ import axios from 'axios';
 import PageLink from './PageLink';
 import AnchorLink from './AnchorLink';
 
+import Link from 'next/link';
+
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isLoading } = useUser();
@@ -26,14 +28,12 @@ const NavBar = () => {
   // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     if (user) {
-      console.log(user);
       axios
-        .post('/api/users', {
-          crudOption: 'upsert',
+        .put('/api/users', {
           user: user
         })
         .then(function (response) {
-          console.log(response);
+          // console.log(response);
         })
         .catch(function (error) {
           console.log(error);
@@ -47,27 +47,17 @@ const NavBar = () => {
     <div className="nav-container" data-testid="navbar">
       <Navbar color="black" light expand="md">
         <Container>
-          <PageLink href="/" testId="navbar-home">
+          <Link href="/" testId="navbar-home">
             <NavbarBrand>
               <h1 className="bg-primary rounded mt-2 card text-white font-weight-bold  px-3"> racoon </h1>
             </NavbarBrand>
-          </PageLink>
+          </Link>
 
           <NavbarToggler onClick={toggle} data-testid="navbar-toggle" />
           <Collapse isOpen={isOpen} navbar>
             <Nav className="mr-auto" navbar data-testid="navbar-items">
               {user && (
                 <>
-                  {/* <NavItem>
-                    <PageLink href="/csr" className="nav-menu" testId="navbar-csr">
-                      Client-side rendered page
-                    </PageLink>
-                  </NavItem>
-                  <NavItem>
-                    <PageLink href="/ssr" className="nav-menu" testId="navbar-ssr">
-                      Server-side rendered page
-                    </PageLink>
-                  </NavItem> */}
                   <NavItem>
                     <PageLink href="/dashboard" className="nav-menu" testId="navbar-external">
                       Dashboard

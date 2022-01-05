@@ -4,10 +4,15 @@ const mongo = new MongoClient(process.env.MONGO_DB_URI);
 async function upsertUser(user) {
   try {
     await mongo.connect();
+    var updatedUser = {
+      fullName: user.name,
+      email: user.email,
+      auth0: user.sub
+    };
     const result = await mongo
       .db()
       .collection('users')
-      .updateOne({ email: user.email }, { $set: user }, { upsert: true });
+      .updateOne({ email: user.email }, { $set: updatedUser }, { upsert: true });
 
     return result;
   } catch (e) {
@@ -20,25 +25,20 @@ async function upsertUser(user) {
 async function getUser(email) {
   try {
     await mongo.connect();
-    const cursor = mongo
+    return await mongo
       .db()
       .collection('users')
-      .find(
+      .findOne(
         {
           email: {
-            $eq: email
+            $eq: email // Check if the email is the same
           }
         },
         {
-          sort: { email: 1 }, // Sort by email ascending
-          projection: { _id: 1, email: 1, fullName: 1, auth0: 1 }
+          sort: { email: 1 } // Sort by email ascending
+          // projection: { _id: 1, email: 1, fullName: 1, auth0: 1 } // Only return the email, fullName and auth0
         }
       );
-    // print a message if no documents were found
-    if ((await cursor.count()) === 0) {
-      console.log('No documents found!');
-    }
-    return await cursor.toArray();
   } catch (e) {
     console.error(e);
   } finally {
@@ -46,29 +46,25 @@ async function getUser(email) {
   }
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   // Get data from your database
   var result = {};
 
-  switch (req.body.crudOption) {
-    case 'upsert':
-      result = upsertUser({
-        fullName: req.body.user.name,
-        email: req.body.user.email,
-        auth0: req.body.user.sub
-      })
+  switch (req.method) {
+    case 'PUT':
+      await upsertUser(req.body.user)
         .then(data => {
-          return res.status(200).json(data.data);
+          res.status(200).json(data);
         })
         .catch(e => {
           console.error(e);
           res.status(500).json(e);
         });
       break;
-    case 'read':
-      getUser(req.body.user)
+    case 'GET':
+      await getUser(req.query.email)
         .then(data => {
-          return res.status(200).json({ data: data });
+          res.status(200).json(data);
         })
         .catch(e => {
           console.error(e);
@@ -76,7 +72,7 @@ export default function handler(req, res) {
         });
       break;
     default:
-      result = 'No Crud Specified';
-      return res.status(200).json({ data: result });
+      result = 'Invalid Method';
+      res.status(301).json({ data: result });
   }
 }
