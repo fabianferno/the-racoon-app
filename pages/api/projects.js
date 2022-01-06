@@ -41,19 +41,13 @@ async function updateProject(project) {
 async function getProject(_id) {
   try {
     await mongo.connect();
-    await mongo
+    console.log(_id);
+    return await mongo
       .db()
       .collection('projects')
-      .findOne(
-        {
-          _id: {
-            $eq: _id
-          }
-        },
-        {
-          sort: { name: 1 } // Sort by name ascending
-        }
-      );
+      .findOne({
+        _id: new ObjectId(_id)
+      });
   } catch (e) {
     console.error(e);
   } finally {
@@ -76,26 +70,27 @@ export default async function handler(req, res) {
           res.status(500).json(e);
         });
       break;
-    // case 'PUT':
-    //   await updateProject(req.body.project)
-    //     .then(data => {
-    //       res.status(200).json(data);
-    //     })
-    //     .catch(e => {
-    //       console.error(e);
-    //       res.status(500).json(e);
-    //     });
-    //   break;
-    // case 'GET':
-    //   await getProject(req.query._id)
-    //     .then(data => {
-    //       res.status(200).json(data);
-    //     })
-    //     .catch(e => {
-    //       console.error(e);
-    //       res.status(500).json(e);
-    //     });
-    //   break;
+    case 'PUT':
+      await updateProject(req.body.project)
+        .then(data => {
+          res.status(200).json(data);
+        })
+        .catch(e => {
+          console.error(e);
+          res.status(500).json(e);
+        });
+      break;
+    case 'GET':
+      console.log(req.query._id);
+      await getProject(req.query._id)
+        .then(data => {
+          res.status(200).json(data);
+        })
+        .catch(e => {
+          console.error(e);
+          res.status(500).json(e);
+        });
+      break;
     default:
       result = 'Invalid Method';
       res.status(301).json({ data: result });
