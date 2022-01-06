@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import Loading from '../../components/Loading';
 import ErrorMessage from '../../components/ErrorMessage';
 import Highlight from '../../components/Highlight';
-import removeByAttr from '../../utils/helpers';
 
 import axios from 'axios';
 
