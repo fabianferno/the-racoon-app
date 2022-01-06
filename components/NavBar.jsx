@@ -18,8 +18,6 @@ import axios from 'axios';
 import PageLink from './PageLink';
 import AnchorLink from './AnchorLink';
 
-import Link from 'next/link';
-
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isLoading } = useUser();
@@ -39,7 +37,7 @@ const NavBar = () => {
           console.log(error);
         });
     } else {
-      console.log('no user');
+      // console.log('no user');
     }
   }, [user]);
 
@@ -47,11 +45,9 @@ const NavBar = () => {
     <div className="nav-container" data-testid="navbar">
       <Navbar color="black" light expand="md">
         <Container>
-          <Link href="/" testId="navbar-home">
-            <NavbarBrand>
-              <h1 className="bg-primary rounded mt-2 card text-white font-weight-bold  px-3"> racoon </h1>
-            </NavbarBrand>
-          </Link>
+          <NavbarBrand href="/">
+            <h1 className="bg-primary rounded mt-2 card text-white font-weight-bold  px-3"> racoon </h1>
+          </NavbarBrand>
 
           <NavbarToggler onClick={toggle} data-testid="navbar-toggle" />
           <Collapse isOpen={isOpen} navbar>
