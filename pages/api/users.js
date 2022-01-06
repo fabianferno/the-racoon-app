@@ -36,7 +36,6 @@ async function getUser(email) {
         },
         {
           sort: { email: 1 } // Sort by email ascending
-          // projection: { _id: 1, email: 1, fullName: 1, auth0: 1 } // Only return the email, fullName and auth0
         }
       );
   } catch (e) {
