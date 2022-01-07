@@ -6,9 +6,23 @@ var ObjectId = require('mongodb').ObjectId;
 async function createProject(project) {
   try {
     await mongo.connect();
+    var projectOwner = await mongo
+      .db()
+      .collection('users')
+      .findOne(
+        {
+          email: {
+            $eq: project.createdBy // Check if the email is the same
+          }
+        },
+        {
+          sort: { email: 1 } // Sort by email ascending
+        }
+      );
     var project = {
       ...project,
       ...{
+        createdBy: new ObjectId(projectOwner._id),
         collabs: project.collabs.map(user => ({ ...user, _id: new ObjectId(user._id) })),
         admins: project.admins.map(user => ({ ...user, _id: new ObjectId(user._id) }))
       }
