@@ -41,38 +41,47 @@ function Project({ user, error, isLoading }) {
       {isLoading && <Loading />}
       {user && (
         <>
-          <div className="mb-5 d-flex justify-content-between  align-items-center">
+          <div className="mb-5">
             <h1 className="font-weight-bold">{project.name}</h1>
-            <h6 children="text-secondary">{project.description}</h6>
+            <h4 children="text-secondary">{project.description}</h4>
           </div>
-          <section className="pb-5 mb-5">
-            <div className="text-right">
-              <h6 className="text-secondary mb-3">Search and Add them to the project to display below.</h6>
-              {projectLoading && project.collabs.length > 0
-                ? project.collabs.map(item => (
-                    <div className="text-right btn btn-primary mx-2" key={item._id}>
-                      <span className="h3 font-weight-bold text-white">{item.fullName} </span>
-                      <div className="form-check form-switch">
-                        <input
-                          className="form-check-input text-dark"
-                          type="checkbox"
-                          role="switch"
-                          id="roleToggle"
-                          onChange={e => changeRole(item._id, e)}
-                        />
-                        <label className="form-check-label text-white" htmlFor="flexSwitchCheckChecked">
-                          Super Collab?
-                        </label>
-                      </div>
-                      <div
-                        type="button"
-                        onClick={() => removeCollaborator(item._id)}
-                        className="mt-2 badge rounded-pill  bg-dark">
-                        Remove ❌
-                      </div>
-                    </div>
-                  ))
-                : null}
+          <section className="pb-5 mb-5 ">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <div className="btn-dark badge badge-pill mr-2">Urgent</div>
+                <div className="btn-danger badge badge-pill mr-2">Feature</div>
+                <div className="btn-success badge badge-pill mr-2">Hot Fix</div>
+              </div>
+
+              <div className="col-md-3 col-12">
+                <select className="form-control bg-primary text-white" id="exampleFormControlSelect1">
+                  <option>All</option>
+                  <option>Urgent</option>
+                  <option>Feature</option>
+                  <option>Hot Fix</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="d-flex mt-3">
+              <div className="mt-4 mr-5 btn text-right card card-body bg-primary text-white rounded col-3">
+                <div>
+                  <div>
+                    <h2 className="bg-dark p-2 rounded font-weight-bold">Fix Dashboard</h2>
+                    <h5 className="p-2">Complete the dashboard integration</h5>
+                    <p className="p-2 badge ">Fabian Ferno</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 mr-5 btn text-right card card-body bg-primary text-white rounded col-3">
+                <div>
+                  <div>
+                    <h2 className="bg-dark p-2 rounded font-weight-bold">Fix Dashboard</h2>
+                    <h5 className="p-2">Complete the dashboard integration</h5>
+                    <p className="p-2 badge ">Fabian Ferno</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </>
