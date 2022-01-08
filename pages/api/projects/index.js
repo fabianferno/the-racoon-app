@@ -28,7 +28,7 @@ async function createProject(project) {
       }
     };
     const result = await mongo.db().collection('projects').insertOne(project);
-    console.log(result);
+    // console.log(result);
     return result;
   } catch (e) {
     throw e;
@@ -55,7 +55,6 @@ async function updateProject(project) {
 async function getProject(_id) {
   try {
     await mongo.connect();
-    console.log(_id);
     return await mongo
       .db()
       .collection('projects')
@@ -95,7 +94,6 @@ export default async function handler(req, res) {
         });
       break;
     case 'GET':
-      console.log(req.query._id);
       await getProject(req.query._id)
         .then(data => {
           res.status(200).json(data);
