@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Collapse,
-  Container,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from 'reactstrap';
+import { Collapse, Container, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem } from 'reactstrap';
 import { useUser } from '@auth0/nextjs-auth0';
 import axios from 'axios';
 
@@ -23,7 +11,6 @@ const NavBar = () => {
   const { user, isLoading } = useUser();
   const toggle = () => setIsOpen(!isOpen);
 
-  // Similar to componentDidMount and componentDidUpdate:
   useEffect(() => {
     if (user) {
       axios
@@ -31,7 +18,7 @@ const NavBar = () => {
           user: user
         })
         .then(function (response) {
-          // console.log(response);
+          // console.log(response.data);
         })
         .catch(function (error) {
           console.log(error);
