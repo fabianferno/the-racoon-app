@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Button } from 'reactstrap';
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 
 import Loading from '../../components/Loading';
@@ -9,9 +9,8 @@ import Highlight from '../../components/Highlight';
 
 import axios from 'axios';
 
-function CreateProject() {
+function CreateProject({ user, error, isLoading }) {
   const router = useRouter();
-  const { user, error, isLoading } = useUser();
   const searchUserTextRef = useRef();
   const [collaboratorFound, setcollaboratorFound] = useState(false);
   const [collaboratorNotFound, setcollaboratorNotFound] = useState(false);
