@@ -1,5 +1,6 @@
 import React from 'react';
 import { UserProvider } from '@auth0/nextjs-auth0';
+import { UserDataProvider } from '../components/UserDataContext';
 
 import Layout from '../components/Layout';
 
@@ -13,7 +14,9 @@ export default function App({ Component, pageProps }) {
   return (
     <UserProvider>
       <Layout>
-        <Component {...pageProps} />
+        <UserDataProvider>
+          <Component {...pageProps} />
+        </UserDataProvider>
       </Layout>
     </UserProvider>
   );
