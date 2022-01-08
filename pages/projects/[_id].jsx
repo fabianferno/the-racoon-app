@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from 'reactstrap';
-import { useUser, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 
 import Loading from '../../components/Loading';
@@ -10,13 +10,11 @@ import removeByAttr from '../../utils/helpers';
 
 import axios from 'axios';
 
-function Project() {
+function Project({ user, error, isLoading }) {
   const router = useRouter();
 
   const [project, setProject] = useState({});
   const [projectLoading, setProjectLoading] = useState(false);
-
-  const { user, error, isLoading } = useUser();
 
   useEffect(() => {
     axios
